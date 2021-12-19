@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>Luna service - com.webos.service.eim</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">webOS Homebrew Project</a></h1>
+                <nav><ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="https://repo.webosbrew.org">Repo</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Luna service - com.webos.service.eim</h1>
+    
+    <h1>Methods</h1>
+<h2><code>luna://com.webos.service.eim/addDevice</code></h2>
+<p>Registers an application as an input. <code>"supportGIP": true</code> needs to be set in application manifest for this to work.</p>
+<p><strong>Required permissions</strong>: <code>devices</code>, <u><code>public</code></u>, <code>private</code></p>
+<h3>Request</h3>
+<ul>
+<li>[<code>string</code>] <strong><code>appId</code></strong> - Application to be registered as an input device. Does not need to be equal to calling application.</li>
+<li>[<code>string</code>] <strong><code>pigImage</code></strong> - Image rendered in "Input Hub" app, relative to main application directory. Can be set to empty string. eim crashes when this field is missing.</li>
+<li>[<code>string</code>] <strong><code>mvpdIcon</code></strong> - ???; Required before webOS 3.x, can be set to empty string.</li>
+<li>[<code>string</code>] <code>type</code> - <em>missing description</em> (supported values: <code>MVPD_IP</code>, <code>MVPD_RF</code>)</li>
+<li>[<code>boolean</code>] <code>showPopup</code> - Show a popup notification that an application has been registered.</li>
+<li>[<code>string</code>] <code>label</code> - Application name used in notification popup.</li>
+<li>[<code>string</code>] <code>description</code> - Description rendered in Input Hub</li>
+</ul>
+<h3>Response</h3>
+<ul>
+<li><em>No information...</em></li>
+</ul>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="https://github.com/webosbrew/">webOS Homebrew</a></li>
+                            <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://discord.gg/xWqRVEm">openlgtv Discord</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
