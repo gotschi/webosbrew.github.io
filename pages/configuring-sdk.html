@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>Configuring SDK</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">webOS Homebrew Project</a></h1>
+                <nav><ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="https://repo.webosbrew.org">Repo</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Configuring SDK</h1>
+    
+    <h1>Development TV setup</h1>
+<p>Recommended tooling for webOS TV development is
+<a href="https://www.npmjs.com/package/@webosose/ares-cli">@webosose/ares-cli</a> NPM
+package. It provides all the basic tools without needing to install them
+globally.</p>
+<h2>Configuring @webosose/ares-cli with Developer Mode App</h2>
+<p>This is partially based on: https://webostv.developer.lge.com/develop/app-test/using-devmode-app/</p>
+<ol>
+<li>Install Developer Mode app from Content Store</li>
+<li>Enable developer mode, enable keyserver</li>
+<li>Download TV's private key: <code>http://TV_IP:9991/webos_rsa</code></li>
+<li>Configure the device using <code>ares-setup-device</code> (<code>-a</code> may need to be replaced with <code>-m</code> if device named <code>webos</code> is already configured)<ul>
+<li><code>PASSPHRASE</code> is the 6-character passphrase printed on screen in developer mode app</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=prisoner&quot;</span> -i <span class="s2">&quot;privatekey=/path/to/downloaded/webos_rsa&quot;</span> -i <span class="s2">&quot;passphrase=PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=9922&quot;</span>
+</code></pre></div>
+
+<h2>Configuring @webosose/ares-cli with rooted TV</h2>
+<ol>
+<li>Enable sshd in Homebrew Channel app</li>
+<li>Generate ssh key on developer machine (<code>ssh-keygen</code>)</li>
+<li>Copy the public key (<code>id_rsa.pub</code>) to <code>/home/root/.ssh/authorized_keys</code> on TV</li>
+<li>Configure the device using <code>ares-setup-device</code> (<code>-a</code> may need to be replaced with <code>-m</code> if device named <code>webos</code> is already configured)</li>
+</ol>
+<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=root&quot;</span> -i <span class="s2">&quot;privatekey=/path/to/id_rsa&quot;</span> -i <span class="s2">&quot;passphrase=SSH_KEY_PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=22&quot;</span>
+</code></pre></div>
+
+<p><strong>Note:</strong> @webosose/ares-cli doesn't need to be installed globally - you can use a package installed in a local project directory by just prefixing above commands with local path, like so: <code>node_modules/.bin/ares-setup-device ...</code></p>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="https://github.com/webosbrew/">webOS Homebrew</a></li>
+                            <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://discord.gg/xWqRVEm">openlgtv Discord</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

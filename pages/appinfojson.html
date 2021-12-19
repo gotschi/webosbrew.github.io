@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>appinfo.json</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">webOS Homebrew Project</a></h1>
+                <nav><ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="https://repo.webosbrew.org">Repo</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">appinfo.json</h1>
+    
+    <h1>Official documentation</h1>
+<ul>
+<li><a href="https://webostv.developer.lge.com/develop/app-developer-guide/app-metadata/">webOS
+   TV</a></li>
+<li><a href="https://www.webosose.org/docs/guides/development/configuration-files/appinfo-json/">webOS OSE</a></li>
+</ul>
+<h1>Undocumented options</h1>
+<h2><code>dialAppName</code> [string]</h2>
+<p>Default: none</p>
+<p>Settings this option will expose an application available for launched via <a href="https://en.wikipedia.org/wiki/Discovery_and_Launch">DIAL Protocol</a> (see: <code>/usr/palm/services/com.webos.service.dial</code>)</p>
+<p>YouTube and Netflix apps have some special handling, but they still can be
+overriden by an unofficial app.</p>
+<p>Official YouTube app has <code>"dialAppName": "youtube"</code>. Installed apps are ordered
+lexicographically based on their IDs - when multiple apps declare the same
+<code>dialAppName</code> the last one will be the one triggered via DIAL.</p>
+<h2><code>noSplashOnLaunch</code> [boolean]</h2>
+<p>Default: <code>false</code></p>
+<p>Disables app splashscreen.</p>
+<h2><code>spinnerOnLaunch</code> [boolean]</h2>
+<p>Default: <code>true</code></p>
+<p>Shows a spinner if splashscreen is disabled. Set this to <code>false</code> to disable any
+app launch indication.</p>
+<h2><code>defaultWindowType</code> [string]</h2>
+<p>Default: <code>card</code>; supported: <code>favoriteshows</code>, <code>favorateshows</code>, <code>floating</code>,
+<code>minimal</code>, <code>popup</code>, <code>screenSaver</code>, <code>showcase</code></p>
+<p>When set to <code>overlay</code> an (web) app will be rendered above existing application.
+Make sure its <code>background-color</code> is set to <code>transparent</code>.</p>
+<p>An <code>overlay</code> app is automatically closed when opening home screen.</p>
+<h2><code>tileSize</code> [string]</h2>
+<p>Default: <code>normal</code></p>
+<p>When set to <code>large</code> tile on home screen will be twice the width.</p>
+<h2><code>visible</code> [boolean]</h2>
+<p>Default: <code>true</code></p>
+<p>Settings this to <code>false</code> will hide an application from home screen. Application
+is still launchable via <code>com.webos.applicationmanager</code> calls and its services
+are callablae.</p>
+<h2><code>supportGIP</code> [boolean]</h2>
+<p>Default: <code>false</code></p>
+<p>Allows application to be registered using as an <a href="{filename}/pages/luna/eim.md">input
+application</a>.</p>
+<h2><code>trustLevel</code> [string]</h2>
+<p>Default: <code>default</code></p>
+<p>This option determines application runtime mode. By default for user-installed
+applications only <code>default</code> (default) and <code>netcast</code> values are supported.</p>
+<p>WebApps running as <code>netcast</code> have some of their APIs limited:</p>
+<ul>
+<li><code>window.PalmServiceBridge</code> is missing</li>
+<li><code>window.PalmSystem.launchParams</code> equivalent is exposed on
+  <code>window.launchParams</code> instead</li>
+</ul>
+<h2><code>vendorExtensions</code> [object]</h2>
+<h3><code>vendorExtensions.userAgent</code> [string]</h3>
+<p><strong>Supported only in <code>netcast</code> mode</strong></p>
+<p>This replaces <code>User-Agent</code> WebAppMgr browser uses. Certain dynamic replacements
+are suported:</p>
+<ul>
+<li><code>$browserName$</code> - <code>LG Browser</code></li>
+<li><code>$browserVersion$</code> - <code>8.00.00</code></li>
+<li><code>$platformName$</code> - <code>webOS.TV</code></li>
+<li><code>$platformVersion$</code> - <code>2016</code>, <code>2017</code>, ...</li>
+<li><code>$chipSetName$</code> - <code>K3LP</code>, <code>M16</code>, <code>O20N</code>, ...</li>
+<li><code>$firmwareVersion$</code> - <code>03.00.20</code>, ...</li>
+<li><code>$modelName$</code> - <code>OLED48C14LB</code>, ...</li>
+<li><code>$networkMode$</code> - <code>wireless</code>/<code>wired</code></li>
+</ul>
+<h3><code>vendorExtensions.allowCrossDomain</code> [boolean]</h3>
+<p><strong>Supported only in <code>netcast</code> mode</strong>; default: <code>false</code></p>
+<p>Disables HTTP CORS request validation.</p>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="https://github.com/webosbrew/">webOS Homebrew</a></li>
+                            <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://discord.gg/xWqRVEm">openlgtv Discord</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
