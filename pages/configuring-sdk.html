@@ -49,6 +49,14 @@ globally.</p>
 </code></pre></div>
 
 <p><strong>Note:</strong> @webosose/ares-cli doesn't need to be installed globally - you can use a package installed in a local project directory by just prefixing above commands with local path, like so: <code>node_modules/.bin/ares-setup-device ...</code></p>
+<h2>Using SSH without SDK on unrooted devices</h2>
+<p>Public key fetched using the method above can be used to connect to the TV using
+plain SSH client:</p>
+<div class="highlight"><pre><span></span><code>ssh -i webos_rsa -p <span class="m">9922</span> prisoner@TV_IP
+</code></pre></div>
+
+<p>Note: non-rooted prisoner user does not have access to PTS, and thus <code>bash</code> will
+behave strangely</p>
 </section>
         <section id="extras" class="body">
                 <div class="blogroll">

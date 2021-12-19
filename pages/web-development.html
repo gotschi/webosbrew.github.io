@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>Web development</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">webOS Homebrew Project</a></h1>
+                <nav><ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="https://repo.webosbrew.org">Repo</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Web development</h1>
+    
+    <h1>Official documentation</h1>
+<ul>
+<li><a href="https://webostv.developer.lge.com/develop/overview/building-your-first-web-app-webos-tv/">webOS
+  TV</a></li>
+</ul>
+<h1>Developer Toolbar</h1>
+<p>Web applications on webOS can be inspected using "Developer Toolbar", equivalent
+to the one present in modern browsers.</p>
+<p>This can be accessed using some different methods:</p>
+<ol>
+<li>Running <code>ares-inspect APPID</code> with <a href="/pages/configuring-sdk.html">SDK set up</a></li>
+<li>Directly accessing <code>http://TV_IP:9998</code> from a browser (equivalent to method
+   1, but does not require SDK)</li>
+<li>Adding <code>TV_IP:9998</code> as a "Remote Target" in <code>chrome://inspect</code> in Chrome-based
+   browsers.</li>
+</ol>
+<p>All these methods have some limitations in case of older webOS versions. For
+example - on webOS 3.8 methods 1 and 2:</p>
+<ul>
+<li>Dev toolbar fails completely when opened in Chromium 96 (only top tab bar is
+  rendered)</li>
+<li>"Console" is not scrollable and code cannot be injected when running in
+  Firefox 94</li>
+<li>Works mostly fine in Midori 9.0 (webkitGTK-based browser on Linux)</li>
+</ul>
+<p>Option 3 works fine, but code execution in "Console" tab does not work and
+preview window seems corrupted. This also may trigger WAM crash sometimes for
+some reason.</p>
+<h1>Undocumented features</h1>
+<h2>Input/TV embedding</h2>
+<p>Web apps can embed connected inputs surface in their DOM:</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">video</span> <span class="na">autoplay</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;width:50%;height:50%&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">source</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;service/webos-external&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;ext://hdmi:1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">source</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>Supported sources: <code>ext://hdmi:1</code>, <code>ext://hdmi:2</code>, <code>ext://hdmi:3</code>, <code>ext://hdmi:4</code>, <code>ext://comp:1</code>, <code>ext://av:1</code>, <code>ext://av:2</code>.
+Additionally TV stream can be embedded with <code>src="tv://"</code> and <code>type="service/webos-broadcast"</code></p>
+<p>Seems like only a single external input can be displayed at the same time. (though, this may be a dependednt on used hardware)</p>
+<p>This also works partially in system browser (content is cut off whenever status
+bar is visible), but one probably should not rely on this.</p>
+<h2>Userscripts in apps</h2>
+<p>Userscript present in <a href="https://github.com/webosose/wam/blob/f7c68dbeb744e8af66e4a83507b3d429dd692b2f/src/core/WebAppManagerConfig.cpp#L71-L73"><code>webOSUserScripts/userScript.js</code></a>
+will be <a href="https://github.com/webosose/wam/blob/f7c68dbeb744e8af66e4a83507b3d429dd692b2f/src/core/WebPageBase.cpp#L476-L486">loaded as a userscript</a>
+in app webviews / frames, including frames in origins outside of app root.</p>
+<p>Example application that uses this:
+<a href="https://github.com/webosbrew/youtube-webos">webosbrew/youtube-webos</a></p>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="https://github.com/webosbrew/">webOS Homebrew</a></li>
+                            <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://discord.gg/xWqRVEm">openlgtv Discord</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
