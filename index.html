@@ -19,7 +19,48 @@
 <section id="content" class="body">
     <h1 class="entry-title">Home - webOS Homebrew Project</h1>
     
-    <h2>Get Started</h2>
+    <h2>What Does It Do?</h2>
+<p>webosbrew is a community surrounded around homebrew (unofficial software)
+development for LG webOS Smart TV platform.
+Our main points of interest are:</p>
+<ul>
+<li>Building <a href="https://github.com/webosbrew/meta-lg-webos-ndk">an unofficial native app
+   toolchain</a></li>
+<li>Reverse engineering and documenting <a href="https://github.com/webosbrew/tv-native-apis">native system APIs</a> and other undocumented features</li>
+<li>Maintaining an independent <a href="https://github.com/webosbrew/apps-repo">repository of unofficial applications</a> and development tools</li>
+<li>Building, porting and maintaining pieces of software for the platform, for
+   example:<ul>
+<li><a href="https://github.com/webosbrew/webos-homebrew-channel">webos-homebrew-channel</a> - homebrew "application store"</li>
+<li><a href="https://github.com/webosbrew/youtube-webos">youtube-webos</a> - YouTube TV
+  app with extended functionalities (adblocking, sponsorblock)</li>
+<li><a href="https://github.com/webosbrew/hyperion-webos">hyperion-webos</a> - Hyperion.NG
+  ambilight clone video capture</li>
+<li><a href="https://github.com/webosbrew/RetroArch">RetroArch</a> - console emulator frontend</li>
+<li>...and <a href="https://github.com/webosbrew">more</a></li>
+</ul>
+</li>
+</ul>
+<p>Our community has some overlap with <a href="https://rootmy.tv">RootMyTV</a> and <a href="https://openlgtv.github.io">OpenLGTV</a> teams, but each has its distinct purpose. (root access exploitation and low level hardware reversing respectively)</p>
+<p>Our main points of contact are <a href="https://discord.gg/nKQW6FPWeM">#homebrew channel on OpenLGTV Discord</a> and <a href="https://matrix.to/#/#openlgtv:netserve.live">#openlgtv:netserve.live</a> Matrix channel.</p>
+<h2>Getting Started</h2>
+<p>Currently, the easiest method of enjoying homebrew software on webOS is
+using Homebrew Channel, which is automatically installed when using <a href="https://rootmy.tv">RootMyTV</a>
+exploit. <a href="https://github.com/webosbrew/webos-homebrew-channel">Homebrew Channel</a>
+is a user friendly unofficial "application store".</p>
+<p>Alternative method, if your TV is not vulnerable to RootMyTV exploit chain, is
+to <a href="https://webostv.developer.lge.com/develop/app-test/using-devmode-app/">enable Developer
+Mode</a> on
+a TV and then use our <a href="https://github.com/webosbrew/dev-manager-desktop">Device Manager
+app</a>.</p>
+<p>Keep in mind this has a downside of requiring "Developer Mode Session" renewal
+in "Developer Mode" every 48 hours. Alternatively, if you are technically
+profficient, machine in a local network can periodically refresh the token for
+you using a script <a href="https://github.com/webosbrew/dev-goodies/blob/main/reset-devmode-timer.sh">like one of these</a>.</p>
+<h2>Find Apps</h2>
+<p>Repository of webOS homebrew applications can be viewed on the web on
+<a href="https://repo.webosbrew.org">https://repo.webosbrew.org</a>. The same repository is
+also accessible in Homebrew Channel app by default.</p>
+<h2>For Developers</h2>
 <ul>
 <li><a href="/pages/configuring-sdk.html">Configuring SDK</a></li>
 <li><a href="/pages/native-development.html">Native development</a></li>
@@ -31,9 +72,6 @@
 </ul>
 </li>
 </ul>
-<h2>What Does It Do?</h2>
-<h2>Find Apps</h2>
-<h2>For Developers</h2>
 </section>
         <section id="extras" class="body">
                 <div class="blogroll">
