@@ -29,13 +29,15 @@ globally.</p>
 <ol>
 <li>Install Developer Mode app from Content Store</li>
 <li>Enable developer mode, enable keyserver</li>
-<li>Download TV's private key: <code>http://TV_IP:9991/webos_rsa</code></li>
+<li>Download TV's private key: <code>http://TV_IP:9991/webos_rsa</code> and save under <code>$HOME/.ssh</code></li>
+<li>As with any SSH key, restrict its access rights: <code>chmod 600 ~/.ssh/webos_rsa</code></li>
+<li>You can test the key with: <code>ssh-keygen -y -P "PASSPHRASE" -f ~/.ssh/webos_rsa</code></li>
 <li>Configure the device using <code>ares-setup-device</code> (<code>-a</code> may need to be replaced with <code>-m</code> if device named <code>webos</code> is already configured)<ul>
 <li><code>PASSPHRASE</code> is the 6-character passphrase printed on screen in developer mode app</li>
 </ul>
 </li>
 </ol>
-<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=prisoner&quot;</span> -i <span class="s2">&quot;privatekey=/path/to/downloaded/webos_rsa&quot;</span> -i <span class="s2">&quot;passphrase=PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=9922&quot;</span>
+<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=prisoner&quot;</span> -i <span class="s2">&quot;privatekey=webos_rsa&quot;</span> -i <span class="s2">&quot;passphrase=PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=9922&quot;</span>
 </code></pre></div>
 
 <h2>Configuring @webosose/ares-cli with rooted TV</h2>
@@ -45,7 +47,7 @@ globally.</p>
 <li>Copy the public key (<code>id_rsa.pub</code>) to <code>/home/root/.ssh/authorized_keys</code> on TV</li>
 <li>Configure the device using <code>ares-setup-device</code> (<code>-a</code> may need to be replaced with <code>-m</code> if device named <code>webos</code> is already configured)</li>
 </ol>
-<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=root&quot;</span> -i <span class="s2">&quot;privatekey=/path/to/id_rsa&quot;</span> -i <span class="s2">&quot;passphrase=SSH_KEY_PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=22&quot;</span>
+<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=root&quot;</span> -i <span class="s2">&quot;privatekey=id_rsa&quot;</span> -i <span class="s2">&quot;passphrase=SSH_KEY_PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=22&quot;</span>
 </code></pre></div>
 
 <p><strong>Note:</strong> @webosose/ares-cli doesn't need to be installed globally - you can use a package installed in a local project directory by just prefixing above commands with local path, like so: <code>node_modules/.bin/ares-setup-device ...</code></p>
