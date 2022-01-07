@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="generator" content="Pelican" />
-        <title>Logging</title>
-        <link rel="stylesheet" href="/theme/css/main.css" />
+      <title>webOS Homebrew Project - Logging</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="generator" content="Pelican"/>
+    <link href="/theme/styles/main.css?7e6aa75e" type="text/css" rel="stylesheet">
+
+
 </head>
 
 <body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">webOS Homebrew Project</a></h1>
-                <nav><ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/develop">Develop</a></li>
-                    <li><a href="https://repo.webosbrew.org">Repo</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-    <h1 class="entry-title">Logging</h1>
+<header>
+    <div class="logo">
+        <a href="/"><img src="/theme/images/icon80.png" width="40px" height="40px"></a>
+    </div>
+    <nav id="menu">
+        <ul>
+            <li><a href="https://repo.webosbrew.org">Applications</a></li>
+            <li><a href="/develop">Develop</a></li>
+        </ul>
+    </nav><!-- /#menu -->
+</header>
+<div id="content">
+    <div class="main">
+    <h1>Logging</h1>
     
+
     <p>Logging on webOS TV is handled by <code>PmLogDaemon</code> service. It is similar to most
 other system logging daemons. Most log messages are dumped into
 <code>/var/log/messages</code> (though some are routed into different paths - see
@@ -61,31 +68,22 @@ mode.</p>
 before launch, like so:</p>
 <div class="highlight"><pre><span></span><code><span class="nv">SEGFAULT_SIGNALS</span><span class="o">=</span> ./buggy-binary
 </code></pre></div>
-</section>
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>links</h2>
-                        <ul>
-                            <li><a href="https://github.com/webosbrew/">webOS Homebrew</a></li>
-                            <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
 
-                            <li><a href="https://discord.gg/xWqRVEm">openlgtv Discord</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
-                </address><!-- /#about -->
-
-                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
+    </div>
+    <div class="side">
+        <h2>Links</h2>
+        <ul>
+            <li><a href="https://github.com/webosbrew/">webOS Homebrew</a></li>
+            <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+            <li><a href="https://discord.gg/xWqRVEm">openlgtv Discord</a></li>
+        </ul>
+    </div><!-- /.blogroll -->
+</div>
+<footer id="contentinfo" class="body">
+    <address id="about" class="vcard body">
+        Proudly powered by <a href="https://getpelican.com/">Pelican</a>,
+        which takes great advantage of <a href="https://www.python.org/">Python</a>.
+    </address><!-- /#about -->
+</footer><!-- /#contentinfo -->
 </body>
 </html>
