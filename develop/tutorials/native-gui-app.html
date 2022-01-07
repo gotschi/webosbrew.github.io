@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="Pelican" />
+        <title>Develop Native GUI Application save_as: develop/tutorials/native-gui-app.html</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">webOS Homebrew Project</a></h1>
+                <nav><ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/develop">Develop</a></li>
+                    <li><a href="https://repo.webosbrew.org">Repo</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+    <h1 class="entry-title">Develop Native GUI Application save_as: develop/tutorials/native-gui-app.html</h1>
+    
+    <p>Native system apps in webOS Uses Qt, but Qt version varies between system versions.</p>
+<p>For maximum compatibility, this tutorial shows how to build GUI application with SDL2.</p>
+<p>This project is written in C11, and it can run through webOS 1 to webOS 6 without any issue.</p>
+<h2>Config CMake Project</h2>
+<p>Start with project declaration.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cmake_minimum_required</span> <span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.8</span><span class="p">)</span>
+
+<span class="c"># This is a C/C++ project</span>
+<span class="nb">project</span> <span class="p">(</span><span class="s2">&quot;myapp&quot;</span><span class="w"> </span><span class="s">VERSION</span><span class="w"> </span><span class="s">1.0</span><span class="w"> </span><span class="s">LANGUAGES</span><span class="w"> </span><span class="s">C</span><span class="w"> </span><span class="s">CXX</span><span class="p">)</span>
+
+<span class="c"># Use `pkg-config` to link needed libraries.</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">PkgConfig</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+
+<span class="c"># Use SDL2 for window creation and event handling.</span>
+<span class="nb">pkg_check_modules</span><span class="p">(</span><span class="s">SDL2</span><span class="w"> </span><span class="s">REQUIRED</span><span class="w"> </span><span class="s">sdl2</span><span class="p">)</span>
+
+<span class="c"># Add source to this project&#39;s executable.</span>
+<span class="nb">add_executable</span> <span class="p">(</span><span class="s">myapp</span><span class="w"> </span><span class="s2">&quot;src/myapp.c&quot;</span><span class="p">)</span>
+
+<span class="c"># Link SDL2</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s2">&quot;myapp&quot;</span><span class="w"> </span><span class="s">SYSTEM</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">SDL2_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s2">&quot;myapp&quot;</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">SDL2_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Create an empty app with SDL2 and LVGL</h2>
+<p>Add <code>lv_conf.h</code>. <code>#defines</code> below are important to have, for other settings you can set based on your use case.</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/* Use 32-bit color depth */</span><span class="w"></span>
+<span class="cp">#define LV_COLOR_DEPTH     32</span>
+
+<span class="cm">/* Use stdlib to allocate/free memory */</span><span class="w"></span>
+<span class="cp">#define LV_MEM_CUSTOM      1</span>
+<span class="cp">#define LV_MEM_CUSTOM_INCLUDE   &lt;string.h&gt;   </span><span class="cm">/*Header for the dynamic memory function*/</span><span class="cp"></span>
+<span class="cp">#define LV_MEM_CUSTOM_ALLOC     malloc</span>
+<span class="cp">#define LV_MEM_CUSTOM_FREE      free</span>
+<span class="cp">#define LV_MEM_CUSTOM_REALLOC   realloc</span>
+
+<span class="cm">/* Use the standard `memcpy` and `memset` instead of LVGL&#39;s own functions. */</span><span class="w"></span>
+<span class="cp">#define LV_MEMCPY_MEMSET_STD    1</span>
+
+<span class="cm">/* Let LVGL call SDL_GetTicks automatically so we can skip creating a separate timer thread. */</span><span class="w"></span>
+<span class="cp">#define LV_TICK_CUSTOM     1</span>
+<span class="cp">#define LV_TICK_CUSTOM_INCLUDE  &lt;SDL.h&gt;</span>
+<span class="cp">#define LV_TICK_CUSTOM_SYS_TIME_EXPR (SDL_GetTicks())</span>
+
+<span class="cp">#define LV_DRAW_COMPLEX 1</span>
+<span class="cp">#define LV_SHADOW_CACHE_SIZE    0</span>
+<span class="cp">#define LV_IMG_CACHE_DEF_SIZE       0</span>
+
+<span class="cm">/* Use SDL draw backend */</span><span class="w"></span>
+<span class="cp">#define LV_USE_GPU_SDL    1</span>
+<span class="cp">#define LV_GPU_SDL_INCLUDE_PATH &lt;SDL.h&gt;</span>
+</code></pre></div>
+
+<p>Edit <code>src/myapp.c</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">process_events</span><span class="p">();</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">lv_disp_t</span><span class="w"> </span><span class="o">*</span><span class="nf">display_init</span><span class="p">(</span><span class="n">SDL_Window</span><span class="w"> </span><span class="o">*</span><span class="n">window</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">flush_cb</span><span class="p">(</span><span class="n">lv_disp_drv_t</span><span class="w"> </span><span class="o">*</span><span class="n">disp_drv</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">lv_area_t</span><span class="w"> </span><span class="o">*</span><span class="n">area</span><span class="p">,</span><span class="w"> </span><span class="n">lv_color_t</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">);</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">running</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_Init</span><span class="p">(</span><span class="n">SDL_INIT_VIDEO</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_init</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">800</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">480</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_DisplayMode</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_GetDisplayMode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mode</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* Get display size. Fallback to 1920x1080 if failed. */</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="p">.</span><span class="n">w</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">mode</span><span class="p">.</span><span class="n">h</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mode</span><span class="p">.</span><span class="n">w</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mode</span><span class="p">.</span><span class="n">h</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/* Caveat: Don&#39;t use SDL_WINDOW_FULLSCREEN_DESKTOP on webOS. On older platforms it&#39;s not supported. */</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_Window</span><span class="w"> </span><span class="o">*</span><span class="n">window</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SDL_CreateWindow</span><span class="p">(</span><span class="s">&quot;myapp&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">SDL_WINDOWPOS_UNDEFINED</span><span class="p">,</span><span class="w"> </span><span class="n">SDL_WINDOWPOS_UNDEFINED</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">SDL_WINDOW_FULLSCREEN</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SDL_WINDOW_ALLOW_HIGHDPI</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_t</span><span class="w"> </span><span class="o">*</span><span class="n">disp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">display_init</span><span class="p">(</span><span class="n">window</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_set_default</span><span class="p">(</span><span class="n">disp</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">lv_obj_t</span><span class="w"> </span><span class="o">*</span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lv_label_create</span><span class="p">(</span><span class="n">lv_scr_act</span><span class="p">());</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_obj_set_pos</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="n">LV_DPX</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="w"> </span><span class="n">LV_DPX</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_label_set_text</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello, world!&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">running</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">process_events</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">lv_task_handler</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_Delay</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_DestroyWindow</span><span class="p">(</span><span class="n">window</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_Quit</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Implement functions declared above</p>
+<div class="highlight"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">process_events</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_Event</span><span class="w"> </span><span class="n">event</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">SDL_PollEvent</span><span class="p">(</span><span class="o">&amp;</span><span class="n">event</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="nl">SDL_QUIT</span><span class="p">:</span><span class="w"></span>
+<span class="w">                </span><span class="n">running</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">default</span><span class="o">:</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">lv_disp_t</span><span class="w"> </span><span class="o">*</span><span class="nf">display_init</span><span class="p">(</span><span class="n">SDL_Window</span><span class="w"> </span><span class="o">*</span><span class="n">window</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_GetWindowSize</span><span class="p">(</span><span class="n">window</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_SetHint</span><span class="p">(</span><span class="n">SDL_HINT_RENDER_SCALE_QUALITY</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_Renderer</span><span class="w"> </span><span class="o">*</span><span class="n">renderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SDL_CreateRenderer</span><span class="p">(</span><span class="n">window</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">SDL_RENDERER_ACCELERATED</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_draw_buf_t</span><span class="w"> </span><span class="o">*</span><span class="n">draw_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">lv_disp_draw_buf_t</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_Texture</span><span class="w"> </span><span class="o">*</span><span class="n">texture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lv_draw_sdl_create_screen_texture</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_draw_buf_init</span><span class="p">(</span><span class="n">draw_buf</span><span class="p">,</span><span class="w"> </span><span class="n">texture</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">height</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_drv_t</span><span class="w"> </span><span class="o">*</span><span class="n">driver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">lv_disp_drv_t</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_drv_init</span><span class="p">(</span><span class="n">driver</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">lv_draw_sdl_drv_param_t</span><span class="w"> </span><span class="o">*</span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lv_mem_alloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">lv_draw_sdl_drv_param_t</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">param</span><span class="o">-&gt;</span><span class="n">renderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">renderer</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">driver</span><span class="o">-&gt;</span><span class="n">user_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">driver</span><span class="o">-&gt;</span><span class="n">draw_buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">draw_buf</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">driver</span><span class="o">-&gt;</span><span class="n">flush_cb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flush_cb</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">driver</span><span class="o">-&gt;</span><span class="n">hor_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">width</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">driver</span><span class="o">-&gt;</span><span class="n">ver_res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">height</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">SDL_SetRenderTarget</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span><span class="w"> </span><span class="n">texture</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_t</span><span class="w"> </span><span class="o">*</span><span class="n">disp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lv_disp_drv_register</span><span class="p">(</span><span class="n">driver</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">disp</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">flush_cb</span><span class="p">(</span><span class="n">lv_disp_drv_t</span><span class="w"> </span><span class="o">*</span><span class="n">disp_drv</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">lv_area_t</span><span class="w"> </span><span class="o">*</span><span class="n">area</span><span class="p">,</span><span class="w"> </span><span class="n">lv_color_t</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">LV_UNUSED</span><span class="p">(</span><span class="n">src</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">area</span><span class="o">-&gt;</span><span class="n">x2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">area</span><span class="o">-&gt;</span><span class="n">y2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"></span>
+<span class="w">        </span><span class="n">area</span><span class="o">-&gt;</span><span class="n">x1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">disp_drv</span><span class="o">-&gt;</span><span class="n">hor_res</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">area</span><span class="o">-&gt;</span><span class="n">y1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">disp_drv</span><span class="o">-&gt;</span><span class="n">ver_res</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">lv_disp_flush_ready</span><span class="p">(</span><span class="n">disp_drv</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">lv_disp_flush_is_last</span><span class="p">(</span><span class="n">disp_drv</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">lv_draw_sdl_drv_param_t</span><span class="w"> </span><span class="o">*</span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">disp_drv</span><span class="o">-&gt;</span><span class="n">user_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_Renderer</span><span class="w"> </span><span class="o">*</span><span class="n">renderer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param</span><span class="o">-&gt;</span><span class="n">renderer</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_Texture</span><span class="w"> </span><span class="o">*</span><span class="n">texture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">disp_drv</span><span class="o">-&gt;</span><span class="n">draw_buf</span><span class="o">-&gt;</span><span class="n">buf1</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_SetRenderTarget</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_SetRenderDrawColor</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_RenderClear</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_SetTextureBlendMode</span><span class="p">(</span><span class="n">texture</span><span class="p">,</span><span class="w"> </span><span class="n">SDL_BLENDMODE_BLEND</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_RenderCopy</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span><span class="w"> </span><span class="n">texture</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_RenderPresent</span><span class="p">(</span><span class="n">renderer</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">SDL_SetRenderTarget</span><span class="p">(</span><span class="n">renderer</span><span class="p">,</span><span class="w"> </span><span class="n">texture</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">lv_disp_flush_ready</span><span class="p">(</span><span class="n">disp_drv</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Now if you build the project, you should be able to get a binary. If you build the project with system toolchain, you'll
+be able to run it, and see "Hello, world!" on top left corner.</p>
+<p>Next, we configure CMake to generate IPK for installing on TV.</p>
+<h2>Create Installation Package</h2>
+<h3>Create <code>appinfo.json</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;com.mycompany.myapp&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;native&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;main&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;myapp&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;icon&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;icon.png&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Native App&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.0.1&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Config CPack</h3>
+<p>Append to <code>CMakeLists.txt</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span><span class="w"> </span><span class="s">myapp</span><span class="w"> </span><span class="s">RUNTIME</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s">.</span><span class="p">)</span>
+<span class="nb">install</span><span class="p">(</span><span class="s">FILES</span><span class="w"> </span><span class="s">appinfo.json</span><span class="w"> </span><span class="s">icon.png</span><span class="w"> </span><span class="s">DESTINATION</span><span class="w"> </span><span class="s">.</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CPACK_GENERATOR</span><span class="w"> </span><span class="s2">&quot;External&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CPACK_EXTERNAL_PACKAGE_SCRIPT</span><span class="w"> </span><span class="s2">&quot;${CMAKE_SOURCE_DIR}/AresPackage.cmake&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CPACK_EXTERNAL_ENABLE_STAGING</span><span class="w"> </span><span class="s">TRUE</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CPACK_MONOLITHIC_INSTALL</span><span class="w"> </span><span class="s">TRUE</span><span class="p">)</span>
+
+<span class="nb">include</span><span class="p">(</span><span class="s">CPack</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Create <code>AresPackage.cmake</code></p>
+<div class="highlight"><pre><span></span><code><span class="nb">execute_process</span><span class="p">(</span><span class="s">COMMAND</span><span class="w"> </span><span class="s">ares-package</span><span class="w"> </span><span class="s2">&quot;${CPACK_TEMPORARY_DIRECTORY}&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>Input Handling</h3>
+<h4>Magic Remote (Mouse)</h4>
+<h4>Remote Keys (Keyboard)</h4>
+<h4>Bonus: Gamepad</h4>
+<h3>Shipping with Dependencies</h3>
+<h2>Tips</h2>
+<h3>Remote GDB Debugging</h3>
+<h3>Cross-Platform Program for Easier Debugging</h3>
+<h2>Compatibility</h2>
+<h3>SDL Version Support Chart</h3>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="https://github.com/webosbrew/">webOS Homebrew</a></li>
+                            <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://discord.gg/xWqRVEm">openlgtv Discord</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="https://getpelican.com/">Pelican</a>, which takes great advantage of <a href="https://www.python.org/">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="https://www.smashingmagazine.com/2009/08/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
