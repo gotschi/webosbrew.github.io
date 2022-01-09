@@ -33,23 +33,26 @@ other system logging daemons. Most log messages are dumped into
 configuration in <code>/etc/pmlog.d/</code>)</p>
 <p>By default, on retail software, only messages of certain types from specific
 sources are logged into a file - configured in <code>/etc/PmLogDaemon/whitelist.txt</code>.</p>
-<p>In order to disable log whitelisting certain luna calls need to be executed.
-```sh</p>
-<h1 id="webos-4x">webOS 4.x+<a class="headerlink" href="#webos-4x" title="Permanent link">&para;</a></h1>
-<p>luna-send -n 1 -f luna://com.webos.service.config/setConfigs '{"configs": {"system.collectDevLogs": true}}'</p>
-<h1 id="webos-3x-and-older">webOS 3.x and older<a class="headerlink" href="#webos-3x-and-older" title="Permanent link">&para;</a></h1>
-<p>luna-send -n 1 -f 'luna://com.webos.pmlogd/setdevlogstatus' '{"recordDevLogs":false}'
-```</p>
-<p>Then log levels can be adjusted using <code>PmLogCtl</code>:
-```sh</p>
-<h1 id="list-all-contexts-these-only-show-up-after-a-first-message-on-a-specific">List all contexts. These only show up after a first message on a specific<a class="headerlink" href="#list-all-contexts-these-only-show-up-after-a-first-message-on-a-specific" title="Permanent link">&para;</a></h1>
-<h1 id="context">context.<a class="headerlink" href="#context" title="Permanent link">&para;</a></h1>
-<p>PmLogCtl show</p>
-<h1 id="adjust-log-level">Adjust log level<a class="headerlink" href="#adjust-log-level" title="Permanent link">&para;</a></h1>
-<p>PmLogCtl set WAM debug</p>
-<h1 id="bulk-adjust">Bulk adjust<a class="headerlink" href="#bulk-adjust" title="Permanent link">&para;</a></h1>
-<p>PmLogCtl '*' none
-```</p>
+<p>In order to disable log whitelisting certain luna calls need to be executed.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># webOS 4.x+</span>
+luna-send -n <span class="m">1</span> -f luna://com.webos.service.config/setConfigs <span class="s1">&#39;{&quot;configs&quot;: {&quot;system.collectDevLogs&quot;: true}}&#39;</span>
+
+<span class="c1"># webOS 3.x and older</span>
+luna-send -n <span class="m">1</span> -f <span class="s1">&#39;luna://com.webos.pmlogd/setdevlogstatus&#39;</span> <span class="s1">&#39;{&quot;recordDevLogs&quot;:false}&#39;</span>
+</code></pre></div>
+
+<p>Then log levels can be adjusted using <code>PmLogCtl</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># List all contexts. These only show up after a first message on a specific</span>
+<span class="c1"># context.</span>
+PmLogCtl show
+
+<span class="c1"># Adjust log level</span>
+PmLogCtl <span class="nb">set</span> WAM debug
+
+<span class="c1"># Bulk adjust</span>
+PmLogCtl <span class="s1">&#39;*&#39;</span> none
+</code></pre></div>
+
 <h2 id="pmloglib-stub">PmLogLib stub<a class="headerlink" href="#pmloglib-stub" title="Permanent link">&para;</a></h2>
 <p>Alternatively (on non-rooted devices) a
 <a href="https://github.com/webosbrew/meta-lg-webos-ndk#system-library-logging">PmLogLib library stub</a> can be used that will print out logs into standard output.</p>
@@ -62,9 +65,9 @@ rootmy.tv/homebrew channel does on startup)</p>
 <p>Crashes may also cause alert popups on screen if system is running in DEBUG
 mode.</p>
 <p>Crashlog dumping can be disabled by settings <code>SEGFAULT_SIGNALS</code> to empty string
-before launch, like so:
-<code>sh
-SEGFAULT_SIGNALS= ./buggy-binary</code></p>
+before launch, like so:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">SEGFAULT_SIGNALS</span><span class="o">=</span> ./buggy-binary
+</code></pre></div>
 
     </div>
     <div class="side">

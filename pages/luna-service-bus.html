@@ -34,28 +34,31 @@
 <h1 id="debugging">Debugging<a class="headerlink" href="#debugging" title="Permanent link">&para;</a></h1>
 <p><code>ls-monitor</code> and <code>luna-send</code> can be used for various debugging purposes:</p>
 <h2 id="listing-connected-services">Listing connected services<a class="headerlink" href="#listing-connected-services" title="Permanent link">&para;</a></h2>
-<p><code>sh
-root@lgwebostv:~# ls-monitor -l | head
+<div class="highlight"><pre><span></span><code>root@lgwebostv:~# ls-monitor -l <span class="p">|</span> head
 HUB CLIENTS:
 PID             SERVICE NAME                    EXE                                     TYPE                    UNIQUE NAME
-1173            com.webos.service.tv.teletext   /mnt/lg/tvservice/lgapp/tvservice       static                  /var/run/ls2/WFrhTp
-1173            com.webos.service.tv.xpa        /mnt/lg/tvservice/lgapp/tvservice       static                  /var/run/ls2/QVmATO
-2431            (null)                          /usr/sbin/MaliitServer                  unknown/client only     /var/run/ls2/SyKJDP
-1400            com.webos.service.reclistmgr.list       /usr/sbin/rec-listmgr                   static                  /var/run/ls2/EpBqmE
-1739            com.webos.service.nop           /usr/sbin/nopd                          static                  /var/run/ls2/PcgemZ
-1173            com.webos.service.tv.program    /mnt/lg/tvservice/lgapp/tvservice       static                  /var/run/ls2/3Evy1i</code></p>
+<span class="m">1173</span>            com.webos.service.tv.teletext   /mnt/lg/tvservice/lgapp/tvservice       static                  /var/run/ls2/WFrhTp
+<span class="m">1173</span>            com.webos.service.tv.xpa        /mnt/lg/tvservice/lgapp/tvservice       static                  /var/run/ls2/QVmATO
+<span class="m">2431</span>            <span class="o">(</span>null<span class="o">)</span>                          /usr/sbin/MaliitServer                  unknown/client only     /var/run/ls2/SyKJDP
+<span class="m">1400</span>            com.webos.service.reclistmgr.list       /usr/sbin/rec-listmgr                   static                  /var/run/ls2/EpBqmE
+<span class="m">1739</span>            com.webos.service.nop           /usr/sbin/nopd                          static                  /var/run/ls2/PcgemZ
+<span class="m">1173</span>            com.webos.service.tv.program    /mnt/lg/tvservice/lgapp/tvservice       static                  /var/run/ls2/3Evy1i
+</code></pre></div>
+
 <h2 id="listing-available-endpoints-of-a-service">Listing available endpoints of a service<a class="headerlink" href="#listing-available-endpoints-of-a-service" title="Permanent link">&para;</a></h2>
-<p>```sh
-root@lgwebostv:~# ls-monitor -i com.webos.service.tv.teletext</p>
-<p>METHODS AND SIGNALS REGISTERED BY SERVICE 'com.webos.service.tv.teletext' WITH UNIQUE NAME '/var/run/ls2/WFrhTp' AT HUB</p>
-<p>"/":
-      "enableTeletext": {"provides":["private","tv.services","all"]}
-      "setTeletext": {"provides":["private","tv.services","all"]}
-      "getTeletextList": {"provides":["private","tv.services","all"]}
-      "getTeletextState": {"provides":["private","tv.services","all"]}
-      "getCurrentTeletext": {"provides":["private","tv.services","all"]}
-      "isTimeAvailable": {"provides":["private","tv.services","all"]}
-```</p>
+<div class="highlight"><pre><span></span><code>root@lgwebostv:~# ls-monitor -i com.webos.service.tv.teletext
+
+METHODS AND SIGNALS REGISTERED BY SERVICE <span class="s1">&#39;com.webos.service.tv.teletext&#39;</span> WITH UNIQUE NAME <span class="s1">&#39;/var/run/ls2/WFrhTp&#39;</span> AT HUB
+
+  <span class="s2">&quot;/&quot;</span>:
+      <span class="s2">&quot;enableTeletext&quot;</span>: <span class="o">{</span><span class="s2">&quot;provides&quot;</span>:<span class="o">[</span><span class="s2">&quot;private&quot;</span>,<span class="s2">&quot;tv.services&quot;</span>,<span class="s2">&quot;all&quot;</span><span class="o">]}</span>
+      <span class="s2">&quot;setTeletext&quot;</span>: <span class="o">{</span><span class="s2">&quot;provides&quot;</span>:<span class="o">[</span><span class="s2">&quot;private&quot;</span>,<span class="s2">&quot;tv.services&quot;</span>,<span class="s2">&quot;all&quot;</span><span class="o">]}</span>
+      <span class="s2">&quot;getTeletextList&quot;</span>: <span class="o">{</span><span class="s2">&quot;provides&quot;</span>:<span class="o">[</span><span class="s2">&quot;private&quot;</span>,<span class="s2">&quot;tv.services&quot;</span>,<span class="s2">&quot;all&quot;</span><span class="o">]}</span>
+      <span class="s2">&quot;getTeletextState&quot;</span>: <span class="o">{</span><span class="s2">&quot;provides&quot;</span>:<span class="o">[</span><span class="s2">&quot;private&quot;</span>,<span class="s2">&quot;tv.services&quot;</span>,<span class="s2">&quot;all&quot;</span><span class="o">]}</span>
+      <span class="s2">&quot;getCurrentTeletext&quot;</span>: <span class="o">{</span><span class="s2">&quot;provides&quot;</span>:<span class="o">[</span><span class="s2">&quot;private&quot;</span>,<span class="s2">&quot;tv.services&quot;</span>,<span class="s2">&quot;all&quot;</span><span class="o">]}</span>
+      <span class="s2">&quot;isTimeAvailable&quot;</span>: <span class="o">{</span><span class="s2">&quot;provides&quot;</span>:<span class="o">[</span><span class="s2">&quot;private&quot;</span>,<span class="s2">&quot;tv.services&quot;</span>,<span class="s2">&quot;all&quot;</span><span class="o">]}</span>
+</code></pre></div>
+
 <h3 id="roles">Roles<a class="headerlink" href="#roles" title="Permanent link">&para;</a></h3>
 <p>List above contains <code>roles</code> that are allowed to call said endpoints. By default
 all non-system applications can only access <code>public</code> endpoints. (and ones that
@@ -71,32 +74,34 @@ stored in <code>/var/luna-service2</code> (for store-installed apps) and
 <code>/var/luna-service2-dev</code> (for devmode-installed apps).</p>
 <h2 id="monitoring-serviceclient-calls">Monitoring service/client calls<a class="headerlink" href="#monitoring-serviceclient-calls" title="Permanent link">&para;</a></h2>
 <p><strong>Note:</strong> Filtering is optional. Requests come in in chunks.</p>
-<p><code>sh
-root@lgwebostv:~# ls-monitor --filter com.limelight.webosTime
+<div class="highlight"><pre><span></span><code>root@lgwebostv:~# ls-monitor --filter com.limelight.webosTime
 Status  Prot    Type    Serial          Sender          Destination             Method                                  Payload
-9938.819 TX  call       6               com.limelight.webos (/var/run/ls2/ttfuG6)       com.webos.settingsservice (/var/run/ls2/PwqnAM)         (null)          //getSystemSettings     «{"key": "localeInfo"}»
-9938.832 RX call        6               com.webos.settingsservice (/var/run/ls2/PwqnAM) com.limelight.webos (/var/run/ls2/ttfuG6)               (null)          //getSystemSettings     «{"key": "localeInfo"}»
-9938.837 TX  return     6               com.webos.settingsservice (/var/run/ls2/PwqnAM)         com.limelight.webos (/var/run/ls2/ttfuG6)       «{ "settings": { "localeInfo": { "clock": "locale", "keyboards": [ "en" ], "locales": { "AUD": "pl-PL", "AUD2": "en-GB", "FMT": "en-GB", "NLP": "pl-PL", "STT": "pl-PL", "TV": "en-GB", "UI": "en-GB" }, "timezone": "" } }, "subscribed": false, "method": "getSystemSettings", "returnValue": true }»
-9938.838 RX return      6               com.limelight.webos (/var/run/ls2/ttfuG6)               com.webos.settingsservice (/var/run/ls2/PwqnAM) «{ "settings": { "localeInfo": { "clock": "locale", "keyboards": [ "en" ], "locales": { "AUD": "pl-PL", "AUD2": "en-GB", "FMT": "en-GB", "NLP": "pl-PL", "STT": "pl-PL", "TV": "en-GB", "UI": "en-GB" }, "timezone": "" } }, "subscribed": false, "method": "getSystemSettings", "returnValue": true }»
-9939.289 TX  call       8               com.limelight.webos (/var/run/ls2/ttfuG6)       com.webos.applicationManager (/var/run/ls2/7PqtsE)              (null)          //registerNativeApp     «{"id" : "com.limelight.webos"}»
-9939.291 RX call        8               com.webos.applicationManager (/var/run/ls2/7PqtsE)      com.limelight.webos (/var/run/ls2/ttfuG6)               (null)          //registerNativeApp     «{"id" : "com.limelight.webos"}»
-9939.291 TX  return     8               com.webos.applicationManager (/var/run/ls2/7PqtsE)              com.limelight.webos (/var/run/ls2/ttfuG6)       «{"message":"registered","returnValue":true}»
-9939.292 RX return      8               com.limelight.webos (/var/run/ls2/ttfuG6)               com.webos.applicationManager (/var/run/ls2/7PqtsE)      «{"message":"registered","returnValue":true}»</code></p>
+<span class="m">9938</span>.819 TX  call       <span class="m">6</span>               com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>       com.webos.settingsservice <span class="o">(</span>/var/run/ls2/PwqnAM<span class="o">)</span>         <span class="o">(</span>null<span class="o">)</span>          //getSystemSettings     «<span class="o">{</span><span class="s2">&quot;key&quot;</span>: <span class="s2">&quot;localeInfo&quot;</span><span class="o">}</span>»
+<span class="m">9938</span>.832 RX call        <span class="m">6</span>               com.webos.settingsservice <span class="o">(</span>/var/run/ls2/PwqnAM<span class="o">)</span> com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>               <span class="o">(</span>null<span class="o">)</span>          //getSystemSettings     «<span class="o">{</span><span class="s2">&quot;key&quot;</span>: <span class="s2">&quot;localeInfo&quot;</span><span class="o">}</span>»
+<span class="m">9938</span>.837 TX  <span class="k">return</span>     <span class="m">6</span>               com.webos.settingsservice <span class="o">(</span>/var/run/ls2/PwqnAM<span class="o">)</span>         com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>       «<span class="o">{</span> <span class="s2">&quot;settings&quot;</span>: <span class="o">{</span> <span class="s2">&quot;localeInfo&quot;</span>: <span class="o">{</span> <span class="s2">&quot;clock&quot;</span>: <span class="s2">&quot;locale&quot;</span>, <span class="s2">&quot;keyboards&quot;</span>: <span class="o">[</span> <span class="s2">&quot;en&quot;</span> <span class="o">]</span>, <span class="s2">&quot;locales&quot;</span>: <span class="o">{</span> <span class="s2">&quot;AUD&quot;</span>: <span class="s2">&quot;pl-PL&quot;</span>, <span class="s2">&quot;AUD2&quot;</span>: <span class="s2">&quot;en-GB&quot;</span>, <span class="s2">&quot;FMT&quot;</span>: <span class="s2">&quot;en-GB&quot;</span>, <span class="s2">&quot;NLP&quot;</span>: <span class="s2">&quot;pl-PL&quot;</span>, <span class="s2">&quot;STT&quot;</span>: <span class="s2">&quot;pl-PL&quot;</span>, <span class="s2">&quot;TV&quot;</span>: <span class="s2">&quot;en-GB&quot;</span>, <span class="s2">&quot;UI&quot;</span>: <span class="s2">&quot;en-GB&quot;</span> <span class="o">}</span>, <span class="s2">&quot;timezone&quot;</span>: <span class="s2">&quot;&quot;</span> <span class="o">}</span> <span class="o">}</span>, <span class="s2">&quot;subscribed&quot;</span>: false, <span class="s2">&quot;method&quot;</span>: <span class="s2">&quot;getSystemSettings&quot;</span>, <span class="s2">&quot;returnValue&quot;</span>: <span class="nb">true</span> <span class="o">}</span>»
+<span class="m">9938</span>.838 RX <span class="k">return</span>      <span class="m">6</span>               com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>               com.webos.settingsservice <span class="o">(</span>/var/run/ls2/PwqnAM<span class="o">)</span> «<span class="o">{</span> <span class="s2">&quot;settings&quot;</span>: <span class="o">{</span> <span class="s2">&quot;localeInfo&quot;</span>: <span class="o">{</span> <span class="s2">&quot;clock&quot;</span>: <span class="s2">&quot;locale&quot;</span>, <span class="s2">&quot;keyboards&quot;</span>: <span class="o">[</span> <span class="s2">&quot;en&quot;</span> <span class="o">]</span>, <span class="s2">&quot;locales&quot;</span>: <span class="o">{</span> <span class="s2">&quot;AUD&quot;</span>: <span class="s2">&quot;pl-PL&quot;</span>, <span class="s2">&quot;AUD2&quot;</span>: <span class="s2">&quot;en-GB&quot;</span>, <span class="s2">&quot;FMT&quot;</span>: <span class="s2">&quot;en-GB&quot;</span>, <span class="s2">&quot;NLP&quot;</span>: <span class="s2">&quot;pl-PL&quot;</span>, <span class="s2">&quot;STT&quot;</span>: <span class="s2">&quot;pl-PL&quot;</span>, <span class="s2">&quot;TV&quot;</span>: <span class="s2">&quot;en-GB&quot;</span>, <span class="s2">&quot;UI&quot;</span>: <span class="s2">&quot;en-GB&quot;</span> <span class="o">}</span>, <span class="s2">&quot;timezone&quot;</span>: <span class="s2">&quot;&quot;</span> <span class="o">}</span> <span class="o">}</span>, <span class="s2">&quot;subscribed&quot;</span>: false, <span class="s2">&quot;method&quot;</span>: <span class="s2">&quot;getSystemSettings&quot;</span>, <span class="s2">&quot;returnValue&quot;</span>: <span class="nb">true</span> <span class="o">}</span>»
+<span class="m">9939</span>.289 TX  call       <span class="m">8</span>               com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>       com.webos.applicationManager <span class="o">(</span>/var/run/ls2/7PqtsE<span class="o">)</span>              <span class="o">(</span>null<span class="o">)</span>          //registerNativeApp     «<span class="o">{</span><span class="s2">&quot;id&quot;</span> : <span class="s2">&quot;com.limelight.webos&quot;</span><span class="o">}</span>»
+<span class="m">9939</span>.291 RX call        <span class="m">8</span>               com.webos.applicationManager <span class="o">(</span>/var/run/ls2/7PqtsE<span class="o">)</span>      com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>               <span class="o">(</span>null<span class="o">)</span>          //registerNativeApp     «<span class="o">{</span><span class="s2">&quot;id&quot;</span> : <span class="s2">&quot;com.limelight.webos&quot;</span><span class="o">}</span>»
+<span class="m">9939</span>.291 TX  <span class="k">return</span>     <span class="m">8</span>               com.webos.applicationManager <span class="o">(</span>/var/run/ls2/7PqtsE<span class="o">)</span>              com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>       «<span class="o">{</span><span class="s2">&quot;message&quot;</span>:<span class="s2">&quot;registered&quot;</span>,<span class="s2">&quot;returnValue&quot;</span>:true<span class="o">}</span>»
+<span class="m">9939</span>.292 RX <span class="k">return</span>      <span class="m">8</span>               com.limelight.webos <span class="o">(</span>/var/run/ls2/ttfuG6<span class="o">)</span>               com.webos.applicationManager <span class="o">(</span>/var/run/ls2/7PqtsE<span class="o">)</span>      «<span class="o">{</span><span class="s2">&quot;message&quot;</span>:<span class="s2">&quot;registered&quot;</span>,<span class="s2">&quot;returnValue&quot;</span>:true<span class="o">}</span>»
+</code></pre></div>
+
 <h2 id="executing-one-off-call">Executing one-off call<a class="headerlink" href="#executing-one-off-call" title="Permanent link">&para;</a></h2>
-<p><code>sh
-root@lgwebostv:~# luna-send -n 1 -f 'luna://com.webos.applicationManager/getForegroundAppInfo' '{}'
-{
-    "appId": "com.limelight.webos",
-    "returnValue": true,
-    "windowId": "",
-    "processId": ""
-}</code></p>
+<div class="highlight"><pre><span></span><code>root@lgwebostv:~# luna-send -n <span class="m">1</span> -f <span class="s1">&#39;luna://com.webos.applicationManager/getForegroundAppInfo&#39;</span> <span class="s1">&#39;{}&#39;</span>
+<span class="o">{</span>
+    <span class="s2">&quot;appId&quot;</span>: <span class="s2">&quot;com.limelight.webos&quot;</span>,
+    <span class="s2">&quot;returnValue&quot;</span>: true,
+    <span class="s2">&quot;windowId&quot;</span>: <span class="s2">&quot;&quot;</span>,
+    <span class="s2">&quot;processId&quot;</span>: <span class="s2">&quot;&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+
 <h2 id="subscribing-to-a-streaming-call">Subscribing to a streaming call<a class="headerlink" href="#subscribing-to-a-streaming-call" title="Permanent link">&para;</a></h2>
-<p><code>sh
-root@lgwebostv:~# luna-send -i 'luna://com.webos.applicationManager/getForegroundAppInfo' '{"subscribe":true}'
-{"appId":"com.limelight.webos","subscribed":true,"returnValue":true,"windowId":"","processId":""}
-{"subscribed":true,"appId":"org.webosbrew.hbchannel","returnValue":true,"windowId":"","processId":""}
-{"subscribed":true,"appId":"com.webos.app.hdmi3","returnValue":true,"windowId":"","processId":""}</code></p>
+<div class="highlight"><pre><span></span><code>root@lgwebostv:~# luna-send -i <span class="s1">&#39;luna://com.webos.applicationManager/getForegroundAppInfo&#39;</span> <span class="s1">&#39;{&quot;subscribe&quot;:true}&#39;</span>
+<span class="o">{</span><span class="s2">&quot;appId&quot;</span>:<span class="s2">&quot;com.limelight.webos&quot;</span>,<span class="s2">&quot;subscribed&quot;</span>:true,<span class="s2">&quot;returnValue&quot;</span>:true,<span class="s2">&quot;windowId&quot;</span>:<span class="s2">&quot;&quot;</span>,<span class="s2">&quot;processId&quot;</span>:<span class="s2">&quot;&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;subscribed&quot;</span>:true,<span class="s2">&quot;appId&quot;</span>:<span class="s2">&quot;org.webosbrew.hbchannel&quot;</span>,<span class="s2">&quot;returnValue&quot;</span>:true,<span class="s2">&quot;windowId&quot;</span>:<span class="s2">&quot;&quot;</span>,<span class="s2">&quot;processId&quot;</span>:<span class="s2">&quot;&quot;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&quot;subscribed&quot;</span>:true,<span class="s2">&quot;appId&quot;</span>:<span class="s2">&quot;com.webos.app.hdmi3&quot;</span>,<span class="s2">&quot;returnValue&quot;</span>:true,<span class="s2">&quot;windowId&quot;</span>:<span class="s2">&quot;&quot;</span>,<span class="s2">&quot;processId&quot;</span>:<span class="s2">&quot;&quot;</span><span class="o">}</span>
+</code></pre></div>
 
     </div>
     <div class="side">

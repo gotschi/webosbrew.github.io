@@ -57,14 +57,14 @@ preview window seems corrupted. This also may trigger WAM crash sometimes for
 some reason.</p>
 <h1 id="undocumented-features">Undocumented features<a class="headerlink" href="#undocumented-features" title="Permanent link">&para;</a></h1>
 <h2 id="inputtv-embedding">Input/TV embedding<a class="headerlink" href="#inputtv-embedding" title="Permanent link">&para;</a></h2>
-<p>Web apps can embed connected inputs surface in their DOM:
-```html</p>
-<video autoplay style="width:50%;height:50%">
-  <source type="service/webos-external" src="ext://hdmi:1"></source>
-</video>
-<p><code>``
-Supported sources:</code>ext://hdmi:1<code>,</code>ext://hdmi:2<code>,</code>ext://hdmi:3<code>,</code>ext://hdmi:4<code>,</code>ext://comp:1<code>,</code>ext://av:1<code>,</code>ext://av:2<code>.
-Additionally TV stream can be embedded with</code>src="tv://"<code>and</code>type="service/webos-broadcast"`</p>
+<p>Web apps can embed connected inputs surface in their DOM:</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">video</span> <span class="na">autoplay</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;width:50%;height:50%&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">source</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;service/webos-external&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;ext://hdmi:1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">source</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>Supported sources: <code>ext://hdmi:1</code>, <code>ext://hdmi:2</code>, <code>ext://hdmi:3</code>, <code>ext://hdmi:4</code>, <code>ext://comp:1</code>, <code>ext://av:1</code>, <code>ext://av:2</code>.
+Additionally TV stream can be embedded with <code>src="tv://"</code> and <code>type="service/webos-broadcast"</code></p>
 <p>Seems like only a single external input can be displayed at the same time. (though, this may be a dependednt on used hardware)</p>
 <p>This also works partially in system browser (content is cut off whenever status
 bar is visible), but one probably should not rely on this.</p>
