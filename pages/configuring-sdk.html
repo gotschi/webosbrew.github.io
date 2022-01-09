@@ -27,12 +27,12 @@
     <h1>Configuring SDK</h1>
     
 
-    <h1>Development TV setup</h1>
+    <h1 id="development-tv-setup">Development TV setup<a class="headerlink" href="#development-tv-setup" title="Permanent link">&para;</a></h1>
 <p>Recommended tooling for webOS TV development is
 <a href="https://www.npmjs.com/package/@webosose/ares-cli">@webosose/ares-cli</a> NPM
 package. It provides all the basic tools without needing to install them
 globally.</p>
-<h2>Configuring @webosose/ares-cli with Developer Mode App</h2>
+<h2 id="configuring-webososeares-cli-with-developer-mode-app">Configuring @webosose/ares-cli with Developer Mode App<a class="headerlink" href="#configuring-webososeares-cli-with-developer-mode-app" title="Permanent link">&para;</a></h2>
 <p>This is partially based on: https://webostv.developer.lge.com/develop/app-test/using-devmode-app/</p>
 <ol>
 <li>Install Developer Mode app from Content Store</li>
@@ -41,30 +41,27 @@ globally.</p>
 <li>As with any SSH key, restrict its access rights: <code>chmod 600 ~/.ssh/webos_rsa</code></li>
 <li>You can test the key with: <code>ssh-keygen -y -P "PASSPHRASE" -f ~/.ssh/webos_rsa</code></li>
 <li>Configure the device using <code>ares-setup-device</code> (<code>-a</code> may need to be replaced with <code>-m</code> if device named <code>webos</code> is already configured)<ul>
-<li><code>PASSPHRASE</code> is the 6-character passphrase printed on screen in developer mode app</li>
+<li><code>PASSPHRASE</code> is the 6-character passphrase printed on screen in developer mode app
+<code>sh
+ares-setup-device -a webos -i "username=prisoner" -i "privatekey=webos_rsa" -i "passphrase=PASSPHRASE" -i "host=TV_IP" -i "port=9922"</code></li>
 </ul>
 </li>
 </ol>
-<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=prisoner&quot;</span> -i <span class="s2">&quot;privatekey=webos_rsa&quot;</span> -i <span class="s2">&quot;passphrase=PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=9922&quot;</span>
-</code></pre></div>
-
-<h2>Configuring @webosose/ares-cli with rooted TV</h2>
+<h2 id="configuring-webososeares-cli-with-rooted-tv">Configuring @webosose/ares-cli with rooted TV<a class="headerlink" href="#configuring-webososeares-cli-with-rooted-tv" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Enable sshd in Homebrew Channel app</li>
 <li>Generate ssh key on developer machine (<code>ssh-keygen</code>)</li>
 <li>Copy the public key (<code>id_rsa.pub</code>) to <code>/home/root/.ssh/authorized_keys</code> on TV</li>
-<li>Configure the device using <code>ares-setup-device</code> (<code>-a</code> may need to be replaced with <code>-m</code> if device named <code>webos</code> is already configured)</li>
+<li>Configure the device using <code>ares-setup-device</code> (<code>-a</code> may need to be replaced with <code>-m</code> if device named <code>webos</code> is already configured)
+<code>sh
+ares-setup-device -a webos -i "username=root" -i "privatekey=id_rsa" -i "passphrase=SSH_KEY_PASSPHRASE" -i "host=TV_IP" -i "port=22"</code></li>
 </ol>
-<div class="highlight"><pre><span></span><code>ares-setup-device -a webos -i <span class="s2">&quot;username=root&quot;</span> -i <span class="s2">&quot;privatekey=id_rsa&quot;</span> -i <span class="s2">&quot;passphrase=SSH_KEY_PASSPHRASE&quot;</span> -i <span class="s2">&quot;host=TV_IP&quot;</span> -i <span class="s2">&quot;port=22&quot;</span>
-</code></pre></div>
-
 <p><strong>Note:</strong> @webosose/ares-cli doesn't need to be installed globally - you can use a package installed in a local project directory by just prefixing above commands with local path, like so: <code>node_modules/.bin/ares-setup-device ...</code></p>
-<h2>Using SSH without SDK on unrooted devices</h2>
+<h2 id="using-ssh-without-sdk-on-unrooted-devices">Using SSH without SDK on unrooted devices<a class="headerlink" href="#using-ssh-without-sdk-on-unrooted-devices" title="Permanent link">&para;</a></h2>
 <p>Public key fetched using the method above can be used to connect to the TV using
-plain SSH client:</p>
-<div class="highlight"><pre><span></span><code>ssh -i webos_rsa -p <span class="m">9922</span> prisoner@TV_IP
-</code></pre></div>
-
+plain SSH client:
+<code>sh
+ssh -i webos_rsa -p 9922 prisoner@TV_IP</code></p>
 <p>Note: non-rooted prisoner user does not have access to PTS, and thus <code>bash</code> will
 behave strangely</p>
 

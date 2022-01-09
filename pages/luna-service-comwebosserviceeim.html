@@ -27,11 +27,11 @@
     <h1>Luna service - com.webos.service.eim</h1>
     
 
-    <h1>Methods</h1>
-<h2><code>luna://com.webos.service.eim/addDevice</code></h2>
+    <h1 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h1>
+<h2 id="lunacomwebosserviceeimadddevice"><code>luna://com.webos.service.eim/addDevice</code><a class="headerlink" href="#lunacomwebosserviceeimadddevice" title="Permanent link">&para;</a></h2>
 <p>Registers an application as an input. <code>"supportGIP": true</code> needs to be set in application manifest for this to work.</p>
 <p><strong>Required permissions</strong>: <code>devices</code>, <u><code>public</code></u>, <code>private</code></p>
-<h3>Request</h3>
+<h3 id="request">Request<a class="headerlink" href="#request" title="Permanent link">&para;</a></h3>
 <ul>
 <li>[<code>string</code>] <strong><code>appId</code></strong> - Application to be registered as an input device. Does not need to be equal to calling application.</li>
 <li>[<code>string</code>] <strong><code>pigImage</code></strong> - Image rendered in "Input Hub" app, relative to main application directory. Can be set to empty string. eim crashes when this field is missing.</li>
@@ -41,7 +41,7 @@
 <li>[<code>string</code>] <code>label</code> - Application name used in notification popup.</li>
 <li>[<code>string</code>] <code>description</code> - Description rendered in Input Hub</li>
 </ul>
-<h3>Response</h3>
+<h3 id="response">Response<a class="headerlink" href="#response" title="Permanent link">&para;</a></h3>
 <ul>
 <li><em>No information...</em></li>
 </ul>
