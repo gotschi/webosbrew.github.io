@@ -2,6 +2,14 @@ $font-color: white;
 $color-accent: #cf0551;
 $color-border: #333333;
 
+$content-width: 720px;
+$content-large-width: 960px;
+
+$desktop-small-width: 960px;
+$desktop-large-width: 1280px;
+
 :root {
   --color-accent: #{$color-accent};
+  --desktop-small-width: #{$desktop-small-width};
+  --desktop-large-width: #{$desktop-large-width};
 }
