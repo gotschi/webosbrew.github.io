@@ -76,3 +76,21 @@ div#content {
     }
   }
 }
+
+.pagination {
+  .entry:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  .current {
+    background-color: $color-accent;
+  }
+
+  .disabled {
+    opacity: 0.5;
+  }
+}
