@@ -47,6 +47,12 @@ luna-send -n <span class="m">1</span> -f luna://com.webos.service.applicationMan
 <span class="c1"># Close app</span>
 luna-send -n <span class="m">1</span> <span class="s1">&#39;luna://com.webos.service.applicationManager/closeByAppId&#39;</span> <span class="s1">&#39;{&quot;id&quot;:&quot;com.webos.app.hdmi3&quot;}&#39;</span>
 
+<span class="c1"># Install app from local TVs storage</span>
+luna-send -i -f luna://com.webos.appInstallService/dev/install <span class="s1">&#39;{&quot;id&quot;:&quot;com.ares.defaultName&quot;,&quot;ipkUrl&quot;:&quot;/tmp/app.ipk&quot;,&quot;subscribe&quot;:true}&#39;</span>
+
+<span class="c1"># Install app from remote HTTP url (requires Homebrew Channel)</span>
+luna-send -i -f luna://org.webosbrew.hbchannel.service/install <span class="s1">&#39;{&quot;ipkUrl&quot;:&quot;https://.../app.ipk&quot;,&quot;ipkHash&quot;:&quot;package-sha256sum&quot;}&#39;</span>
+
 <span class="c1"># Launch energy saving screen</span>
 luna-send-pub -f -n <span class="m">1</span> luna://com.webos.service.applicationManager/launch <span class="s1">&#39;{&quot;id&quot;:&quot;com.webos.app.tvhotkey&quot;,&quot;params&quot;:{&quot;activateType&quot;:&quot;energy-saving-mode&quot;}}&#39;</span>
 
@@ -59,7 +65,7 @@ luna-send -n <span class="m">1</span> <span class="s1">&#39;luna://com.webos.set
 <h2 id="screenshots">Screenshots<a class="headerlink" href="#screenshots" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># Note: com.webos.service.tv.capture below has been renamed to com.webos.service.capture on some devices, call signature is the same.</span>
 
-luna-send -n <span class="m">1</span> -f <span class="s1">&#39;luna://com.webos.service.tv.capture/executeOneShot&#39;</span> <span class="s1">&#39;{&quot;path&quot;:&quot;/tmp/capture.png&quot;,&quot;method&quot;:&quot;DISPLAY&quot;,&quot;format&quot;:&quot;PNG&quot;}&#39;</span>
+luna-send -n <span class="m">1</span> -f <span class="s1">&#39;luna://com.webos.service.tv.capture/executeOneShot&#39;</span> <span class="s1">&#39;{&quot;path&quot;:&quot;/tmp/capture.png&quot;,&quot;method&quot;:&quot;DISPLAY&quot;,&quot;format&quot;:&quot;PNG&quot;, &quot;width&quot;: 1920, &quot;height&quot;: 1080}&#39;</span>
 <span class="c1"># Supported formats: BMP, JPG, PNG, RGB, RGBA, YUV422</span>
 <span class="c1"># Supported methods: SCREEN/DISPLAY (alias?), SCREEN_WITH_SOURCE_VIDEO, VIDEO, GRAPHIC, SOURCE/SCALER (alias?)</span>
 </code></pre></div>
