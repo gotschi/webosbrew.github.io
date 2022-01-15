@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <title>Commands Cheatsheet | webOS Homebrew Project</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="generator" content="Pelican"/>
+    <link href="/theme/styles/main.css?04bfa1c2" type="text/css" rel="stylesheet">
+
+
+</head>
+
+<body id="index" class="home">
+<header>
+    <div class="logo">
+        <a href="/"><img src="/theme/images/icon80.png" width="40px" height="40px" alt="webOS Homebrew logo"></a>
+    </div>
+    <nav id="menu">
+        <ul>
+            <li><a href="https://repo.webosbrew.org">Applications</a></li>
+            <li><a href="/develop">Develop</a></li>
+        </ul>
+    </nav><!-- /#menu -->
+</header>
+<div id="content">
+    <div class="main">
+    <h1>Commands Cheatsheet</h1>
+    <a href="https://github.com/webosbrew/webosbrew.github.io/blob/main/content/pages/cheatsheet.md" class="page-source">Source</a>
+    
+
+    <p>This is a list of various commands commonly used during debugging/hacking.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Monitor suspend / resume state</span>
+luna-send -i <span class="s1">&#39;luna://com.webos.service.tvpower/power/getPowerState&#39;</span> <span class="s1">&#39;{&quot;subscribe&quot;:true}&#39;</span>
+
+<span class="c1"># Check currently running application</span>
+luna-send -i <span class="s1">&#39;luna://com.webos.applicationManager/getForegroundAppInfo&#39;</span> <span class="s1">&#39;{&quot;subscribe&quot;:true}&#39;</span>
+
+<span class="c1"># Poke configd options (does not persist through reboots)</span>
+luna-send -n <span class="m">1</span> -f luna://com.webos.service.config/setConfigs <span class="s1">&#39;{&quot;configs&quot;: {&quot;system.collectDevLogs&quot;: true}}&#39;</span>
+
+<span class="c1"># Disable 15 minute no-signal auto power off</span>
+luna-send -n <span class="m">1</span> luna://com.webos.settingsservice/setSystemSettings <span class="s1">&#39;{&quot;settings&quot;:{&quot;autoOff15Min&quot;:&quot;off&quot;},&quot;category&quot;:&quot;time&quot;}&#39;</span>
+
+<span class="c1"># Launch app</span>
+luna-send -n <span class="m">1</span> -f luna://com.webos.service.applicationManager/launch <span class="s1">&#39;{&quot;id&quot;:&quot;com.webos.app.something&quot;, &quot;params&quot;: {&quot;key&quot;: &quot;value&quot;}}&#39;</span>
+
+<span class="c1"># Close app</span>
+luna-send -n <span class="m">1</span> <span class="s1">&#39;luna://com.webos.service.applicationManager/closeByAppId&#39;</span> <span class="s1">&#39;{&quot;id&quot;:&quot;com.webos.app.hdmi3&quot;}&#39;</span>
+
+<span class="c1"># Launch energy saving screen</span>
+luna-send-pub -f -n <span class="m">1</span> luna://com.webos.service.applicationManager/launch <span class="s1">&#39;{&quot;id&quot;:&quot;com.webos.app.tvhotkey&quot;,&quot;params&quot;:{&quot;activateType&quot;:&quot;energy-saving-mode&quot;}}&#39;</span>
+
+<span class="c1"># Screen backlight control</span>
+luna-send -n <span class="m">1</span> <span class="s2">&quot;luna://com.webos.service.tvpower/power/turnOnScreen&quot;</span> <span class="s1">&#39;{}&#39;</span>
+luna-send -n <span class="m">1</span> <span class="s2">&quot;luna://com.webos.service.tvpower/power/turnOffScreen&quot;</span> <span class="s1">&#39;{}&#39;</span>
+luna-send -n <span class="m">1</span> <span class="s1">&#39;luna://com.webos.settingsservice/setSystemSettings&#39;</span> <span class="s1">&#39;{&quot;category&quot;:&quot;picture&quot;,&quot;settings&quot;:{&quot;energySaving&quot;:&quot;screen_off&quot;}}&#39;</span>
+</code></pre></div>
+
+<h2 id="screenshots">Screenshots<a class="headerlink" href="#screenshots" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># Note: com.webos.service.tv.capture below has been renamed to com.webos.service.capture on some devices, call signature is the same.</span>
+
+luna-send -n <span class="m">1</span> -f <span class="s1">&#39;luna://com.webos.service.tv.capture/executeOneShot&#39;</span> <span class="s1">&#39;{&quot;path&quot;:&quot;/tmp/capture.png&quot;,&quot;method&quot;:&quot;DISPLAY&quot;,&quot;format&quot;:&quot;PNG&quot;}&#39;</span>
+<span class="c1"># Supported formats: BMP, JPG, PNG, RGB, RGBA, YUV422</span>
+<span class="c1"># Supported methods: SCREEN/DISPLAY (alias?), SCREEN_WITH_SOURCE_VIDEO, VIDEO, GRAPHIC, SOURCE/SCALER (alias?)</span>
+</code></pre></div>
+
+<h2 id="factorywin-app-ezadjustinstartinstop">Factorywin app (ezAdjust/inStart/inStop)<a class="headerlink" href="#factorywin-app-ezadjustinstartinstop" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>luna-send -n <span class="m">1</span> -f luna://com.webos.service.applicationManager/launch <span class="s1">&#39;{&quot;id&quot;:&quot;com.webos.app.factorywin&quot;,&quot;params&quot;:{&quot;id&quot;:&quot;executeFactory&quot;,&quot;irKey&quot;:&quot;inStart&quot;}}&#39;</span>
+<span class="c1"># Alternative irKeys: powerOnly, inStart, ezAdjust, inStop, pCheck, sCheck, tilt</span>
+
+<span class="c1"># ezAdjust is service menu 1</span>
+<span class="c1"># inStart is service menu 2</span>
+<span class="c1"># inStop is factory reset (?)</span>
+<span class="c1"># pCheck will override some picture settings for lcd testing</span>
+<span class="c1"># sCheck will boost sound to test audio</span>
+<span class="c1"># tilt opens white screen that does nothing and locks remote buttons, goes away after a reboot</span>
+
+<span class="c1"># Password: 0413</span>
+<span class="c1"># Bang &amp; Olufsen password: 1925</span>
+<span class="c1"># &quot;USB Log&quot; (?) password: 1126</span>
+</code></pre></div>
+
+    </div>
+    <div class="side">
+<h3>Links</h3>
+<ul class="links">
+    <li><a href="https://github.com/webosbrew/">Github Organization</a></li>
+    <li><a href="https://discord.gg/xWqRVEm">Join us on Discord</a></li>
+    <li><a href="https://rootmy.tv/">RootMy.TV</a></li>
+    <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+</ul>    </div><!-- /.blogroll -->
+</div>
+<hr>
+<footer id="contentinfo" class="body">
+    <div class="copyright">&copy; 2022 webOS Homebrew Project</div>
+    <div class="powered-by">Powered by <a href="https://getpelican.com/">Pelican</a></div>
+</footer><!-- /#contentinfo --></body>
+</html>
