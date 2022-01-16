@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <title>Luna service - com.webos.service.bluetooth | webOS Homebrew Project</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="generator" content="Pelican"/>
+    <link href="/theme/styles/main.css?04bfa1c2" type="text/css" rel="stylesheet">
+
+
+</head>
+
+<body id="index" class="home">
+<header>
+    <div class="logo">
+        <a href="/"><img src="/theme/images/icon80.png" width="40px" height="40px" alt="webOS Homebrew logo"></a>
+    </div>
+    <nav id="menu">
+        <ul>
+            <li><a href="https://repo.webosbrew.org">Applications</a></li>
+            <li><a href="/develop">Develop</a></li>
+        </ul>
+    </nav><!-- /#menu -->
+</header>
+<div id="content">
+    <div class="main">
+    <h1>Luna service - com.webos.service.bluetooth</h1>
+    <a href="https://github.com/webosbrew/webosbrew.github.io/blob/main/content/pages/luna/bluetooth.md" class="page-source">Source</a>
+    
+
+    <p>Service responsible for bluetooth connectivity. Reversed on webOS 3.8. For equivalent
+service on webOS 4.x and newer see <code>com.webos.service.bluetooth2</code></p>
+<p>"HID" here generally means Sony DualShock4 controllers.</p>
+<h1 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h1>
+<h2 id="lunacomwebosservicebluetoothservicedisconnect"><code>luna://com.webos.service.bluetooth/service/disconnect</code><a class="headerlink" href="#lunacomwebosservicebluetoothservicedisconnect" title="Permanent link">&para;</a></h2>
+<p>Disconnect Bluetooth device. Returns immediately</p>
+<p><strong>Required permissions</strong>: <code>devices</code>, <code>private</code></p>
+<h3 id="request">Request<a class="headerlink" href="#request" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>string</code>] <strong><code>service</code></strong> - Service type to disconnect (supported values: <code>audio</code>, <code>hid</code>)</li>
+<li>[<code>string</code>] <strong><code>address</code></strong> - Device address</li>
+</ul>
+<h3 id="response">Response<a class="headerlink" href="#response" title="Permanent link">&para;</a></h3>
+<ul>
+<li><em>No information...</em></li>
+</ul>
+<h2 id="lunacomwebosservicebluetoothserviceconnect"><code>luna://com.webos.service.bluetooth/service/connect</code><a class="headerlink" href="#lunacomwebosservicebluetoothserviceconnect" title="Permanent link">&para;</a></h2>
+<p>Connect Bluetooth device. Returns immediately</p>
+<p><strong>Required permissions</strong>: <code>devices</code>, <code>private</code></p>
+<h3 id="request_1">Request<a class="headerlink" href="#request_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>string</code>] <strong><code>service</code></strong> - Service type to disconnect (supported values: <code>audio</code>, <code>hid</code>)</li>
+<li>[<code>string</code>] <strong><code>address</code></strong> - Device address</li>
+</ul>
+<h3 id="response_1">Response<a class="headerlink" href="#response_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><em>No information...</em></li>
+</ul>
+<h2 id="lunacomwebosservicebluetoothservicesubscribenotifications"><code>luna://com.webos.service.bluetooth/service/subscribeNotifications</code><a class="headerlink" href="#lunacomwebosservicebluetoothservicesubscribenotifications" title="Permanent link">&para;</a></h2>
+<p>Subscribe to connect/disconnect events</p>
+<p><strong>Required permissions</strong>: <code>devices</code>, <code>private</code></p>
+<h3 id="request_2">Request<a class="headerlink" href="#request_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>boolean</code>] <strong><code>subscribe</code></strong> - Needs to be set to true</li>
+</ul>
+<h3 id="response_2">Response<a class="headerlink" href="#response_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>string</code>] <code>listType</code> - <em>missing description</em> (supported values: <code>bonded</code>)</li>
+<li>[<code>string</code>] <code>service</code> - Device service (supported values: <code>hid</code>, <code>audio</code>)</li>
+<li>[<code>string</code>] <code>state</code> - Device state (supported values: <code>connecting</code>, <code>connected</code>, <code>disconnecting</code>, <code>disconnected</code>, <code>(null)</code>)</li>
+<li>[<code>string</code>] <code>address</code> - Device address</li>
+<li>[<code>string</code>] <code>name</code> - Device name</li>
+</ul>
+<h2 id="lunacomwebosservicebluetoothgapgettrusteddevices"><code>luna://com.webos.service.bluetooth/gap/getTrustedDevices</code><a class="headerlink" href="#lunacomwebosservicebluetoothgapgettrusteddevices" title="Permanent link">&para;</a></h2>
+<p>Lists trusted devices</p>
+<p><strong>Required permissions</strong>: <code>devices</code>, <code>private</code></p>
+<h3 id="request_3">Request<a class="headerlink" href="#request_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>string</code>] <strong><code>service</code></strong> - Device type category (supported values: <code>hid</code>, <code>audio</code>, <code>audio_sink</code>, <code>hid_kbd</code>, <code>headset</code>, <code>opc</code>, <code>ops</code>, <code>led</code>, <code>onekey</code>, <code>heartrate</code>, <code>all</code>)</li>
+</ul>
+<h3 id="response_3">Response<a class="headerlink" href="#response_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>number</code>] <code>count</code> - Trusted devices count</li>
+<li>[<code>array</code>] <code>device</code> - Devices list</li>
+<li>[<code>string</code>] <code>device[].name</code> - Device name</li>
+<li>[<code>string</code>] <code>device[].address</code> - Device address</li>
+<li>[<code>number</code>] <code>device[].deviceClass</code> - <em>missing description</em> (supported values: <code>5</code>)</li>
+<li>[<code>string</code>] <code>device[].state</code> - <em>missing description</em> (supported values: <code>connected</code>, <code>disconnected</code>)</li>
+</ul>
+<h2 id="lunacomwebosservicebluetoothgapfinddevices"><code>luna://com.webos.service.bluetooth/gap/findDevices</code><a class="headerlink" href="#lunacomwebosservicebluetoothgapfinddevices" title="Permanent link">&para;</a></h2>
+<p>Scan for devices</p>
+<p><strong>Required permissions</strong>: <code>devices</code>, <code>private</code></p>
+<h3 id="request_4">Request<a class="headerlink" href="#request_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>number</code>] <code>deviceClass</code> - Device class to search for - 4 = audio, 5 = hid, 6 = POPO (photo printer) (supported values: <code>4</code>, <code>5</code>, <code>6</code>)</li>
+<li>[<code>number</code>] <code>seconds</code> - Scan duration</li>
+</ul>
+<h3 id="response_4">Response<a class="headerlink" href="#response_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>string</code>] <code>scanState</code> - <em>missing description</em> (supported values: <code>device</code>, <code>done</code>)</li>
+<li>[<code>object</code>] <code>device</code> - Found device description, only when scanState = device</li>
+<li>[<code>string</code>] <code>device.name</code> - Device name</li>
+<li>[<code>string</code>] <code>device.address</code> - Device address</li>
+<li>[<code>number</code>] <code>device.deviceClass</code> - Device class, see above</li>
+<li>[<code>number</code>] <code>device.rssi</code> - Device RSSI/link quality</li>
+</ul>
+<h2 id="lunacomwebosservicebluetoothgapremovetrusteddevice"><code>luna://com.webos.service.bluetooth/gap/removeTrustedDevice</code><a class="headerlink" href="#lunacomwebosservicebluetoothgapremovetrusteddevice" title="Permanent link">&para;</a></h2>
+<p>Removes trusted/bonded device</p>
+<p><strong>Required permissions</strong>: <code>devices</code>, <code>private</code></p>
+<h3 id="request_5">Request<a class="headerlink" href="#request_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[<code>string</code>] <strong><code>service</code></strong> - Service type to disconnect (supported values: <code>audio</code>, <code>hid</code>)</li>
+<li>[<code>string</code>] <strong><code>address</code></strong> - Device address</li>
+</ul>
+<h3 id="response_5">Response<a class="headerlink" href="#response_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><em>No information...</em></li>
+</ul>
+
+    </div>
+    <div class="side">
+<h3>Links</h3>
+<ul class="links">
+    <li><a href="https://github.com/webosbrew/">Github Organization</a></li>
+    <li><a href="https://discord.gg/xWqRVEm">Join us on Discord</a></li>
+    <li><a href="https://rootmy.tv/">RootMy.TV</a></li>
+    <li><a href="https://openlgtv.github.io/">openlgtv</a></li>
+</ul>    </div><!-- /.blogroll -->
+</div>
+<hr>
+<footer id="contentinfo" class="body">
+    <div class="copyright">&copy; 2022 webOS Homebrew Project</div>
+    <div class="powered-by">Powered by <a href="https://getpelican.com/">Pelican</a></div>
+</footer><!-- /#contentinfo --></body>
+</html>
